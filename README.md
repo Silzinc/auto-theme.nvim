@@ -1,7 +1,7 @@
 <h1 align="left">
 <picture>
-  <source media="(prefers-color-scheme: light)" srcset="https://github.com/navarasu/onedark.nvim/assets/20145075/620d5f32-4788-4397-adb7-3fc3abc8bc29">
-  <img height="100" src="https://github.com/navarasu/onedark.nvim/assets/20145075/5dfe9607-977f-48d9-836f-88a556ec57a3">
+  <source media="(prefers-color-scheme: light)" srcset="https://github.com/navarasu/auto-theme.nvim/assets/20145075/620d5f32-4788-4397-adb7-3fc3abc8bc29">
+  <img height="100" src="https://github.com/navarasu/auto-theme.nvim/assets/20145075/5dfe9607-977f-48d9-836f-88a556ec57a3">
 </picture>
 </h1>
 
@@ -16,7 +16,7 @@
 
 **Dark** and **Light** Themes for neovim >= 0.5 based on [Atom One Dark](https://github.com/atom/atom/tree/master/packages/one-dark-ui) & [Atom One Light](https://github.com/atom/atom/tree/master/packages/one-light-ui) theme written in lua with [TreeSitter](https://github.com/nvim-treesitter/nvim-treesitter) syntax highlight.
 
-*For Vim / Neovim < 0.5, prefer [joshdick/onedark.vim](https://github.com/joshdick/onedark.vim)*
+*For Vim / Neovim < 0.5, prefer [joshdick/auto-theme.vim](https://github.com/joshdick/auto-theme.vim)*
 
 *For latest [TreeSitter](https://github.com/nvim-treesitter/nvim-treesitter) syntax highlight, upgraded to Neovim 0.8.0 or later built with tree-sitter 0.20.3+*
 
@@ -46,26 +46,26 @@ Install via your favourite package manager
 ```lua
 -- Using Lazy
 {
-  "navarasu/onedark.nvim",
+  "navarasu/auto-theme.nvim",
   priority = 1000, -- make sure to load this before all the other start plugins
   config = function()
-    require('onedark').setup {
+    require('auto-theme').setup {
       style = 'darker'
     }
     -- Enable theme
-    require('onedark').load()
+    require('auto-theme').load()
   end
 }
 ```
 
 ```vim
 " Using Vim-Plug
-Plug 'navarasu/onedark.nvim'
+Plug 'navarasu/auto-theme.nvim'
 ```
 
 ```lua
 -- Using Packer
-use 'navarasu/onedark.nvim'
+use 'navarasu/auto-theme.nvim'
 ```
 
 ## Configuration
@@ -74,30 +74,30 @@ use 'navarasu/onedark.nvim'
 
 ```lua
 -- Lua
-require('onedark').load()
+require('auto-theme').load()
 ```
 
 ```vim
 " Vim
-colorscheme onedark
+colorscheme auto-theme
 ```
 
 ### Change default style
 
 ```lua
 -- Lua
-require('onedark').setup {
+require('auto-theme').setup {
     style = 'darker'
 }
-require('onedark').load()
+require('auto-theme').load()
 ```
 
 ```vim
 " Vim
-let g:onedark_config = {
+let g:auto_theme_config = {
     \ 'style': 'darker',
 \}
-colorscheme onedark
+colorscheme auto-theme
 ```
 
 > **Options:**  dark, darker, cool, deep, warm, warmer, light
@@ -106,7 +106,7 @@ colorscheme onedark
 
 ```lua
 -- Lua
-require('onedark').setup  {
+require('auto-theme').setup  {
     -- Main options --
     style = 'dark', -- Default theme style. Choose between 'dark', 'darker', 'cool', 'deep', 'warm', 'warmer' and 'light'
     transparent = false,  -- Show/hide background
@@ -149,12 +149,12 @@ require('onedark').setup  {
 
 ### Vimscript configuration
 
-Onedark can be configured also with Vimscript, using the global dictionary `g:onedark_config`.
+Onedark can be configured also with Vimscript, using the global dictionary `g:auto_theme_config`.
 **NOTE**: when setting boolean values use `v:true` and `v:false` instead of 0 and 1
 
 Example:
 ``` vim
-let g:onedark_config = {
+let g:auto_theme_config = {
   \ 'style': 'deep',
   \ 'toggle_style_key': '<leader>ts',
   \ 'ending_tildes': v:true,
@@ -163,7 +163,7 @@ let g:onedark_config = {
     \ 'background': v:false,
   \ },
 \ }
-colorscheme onedark
+colorscheme auto-theme
 ```
 
 ## Customization
@@ -171,7 +171,7 @@ colorscheme onedark
 Example custom colors and Highlights config
 
 ```lua
-require('onedark').setup {
+require('auto-theme').setup {
   colors = {
     bright_orange = "#ff8800",    -- define a new color
     green = '#00ffaa',            -- redefine an existing color
@@ -190,10 +190,10 @@ Note that TreeSitter keywords have been changed after neovim version 0.8 and onw
 TS prefix is trimmed and lowercase words should be used separated with '.'
 
 The old way before neovim 0.8 looks like this.
-For all keywords see [this](https://github.com/navarasu/onedark.nvim/blob/master/lua/onedark/highlights.lua#L133-L257) file from line 133 to 257
+For all keywords see [this](https://github.com/navarasu/auto-theme.nvim/blob/master/lua/auto-theme/highlights.lua#L133-L257) file from line 133 to 257
 
 ```lua
-require('onedark').setup {
+require('auto-theme').setup {
   colors = {
     bright_orange = "#ff8800",    -- define a new color
     green = '#00ffaa',            -- redefine an existing color
@@ -210,12 +210,12 @@ require('onedark').setup {
 ## Plugins Configuration
 
 ### Enable lualine
-To Enable the `onedark` theme for `Lualine`, specify theme as `onedark`:
+To Enable the `auto-theme` theme for `Lualine`, specify theme as `auto-theme`:
 
 ```lua
 require('lualine').setup {
   options = {
-    theme = 'onedark'
+    theme = 'auto-theme'
     -- ... your lualine config
   }
 }

@@ -1,0 +1,9 @@
+use std::path::PathBuf;
+
+use anyhow::{Result, anyhow};
+
+pub(crate) fn get() -> Result<PathBuf> {
+  Err(anyhow!(
+    "Wallpaper detection: your operating system is not supported."
+  ))
+}

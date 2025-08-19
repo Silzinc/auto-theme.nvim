@@ -1,0 +1,6 @@
+edition = "2021"
+newline_style = "Unix"
+hard_tabs = false
+tab_spaces = 2
+reorder_modules = true
+use_field_init_shorthand = true

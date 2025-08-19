@@ -1,6 +1,6 @@
 local M = {}
-local cfg = vim.g.onedark_config
-local c = require 'onedark.colors'
+local cfg = vim.g.auto_theme_config
+local c = require 'auto-theme.colors'
 
 function M.setup()
     if not cfg.term_colors then return end
