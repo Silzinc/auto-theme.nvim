@@ -122,9 +122,17 @@ function M.generate_palette(args)
 
 	local palette = M._lib.generate_palette(args)
 
-	-- Apply gradients directly in lua. All the rest is done in rust.
+	-- Apply material dispatch
+	for k, mk in pairs(args.material_dispatch) do
+		if not palette[mk] then
+			vim.notify(string.format("invalid material color key '%s'", mk), vim.log.levels.ERROR)
+			return {}
+		end
+		palette[k] = palette[mk]
+	end
 
-	local blend = M._lib.blend
+	-- Apply gradients
+	local blend = require("auto-theme.util").blend
 	for k, v in pairs(mixed_colors) do
 		-- restore the entry
 		args.material_dispatch[k] = v
@@ -138,6 +146,11 @@ function M.generate_palette(args)
 			return {}
 		end
 		palette[k] = blend(palette[v[2]], palette[v[1]], v[3])
+	end
+
+	-- Force static platette into the generated palette
+	for k, v in pairs(args.static_palette) do
+		palette[k] = v
 	end
 
 	return palette

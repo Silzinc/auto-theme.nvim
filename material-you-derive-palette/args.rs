@@ -1,5 +1,3 @@
-use std::collections::HashMap;
-
 use anyhow::anyhow;
 
 use mlua::{Error as LuaError, FromLua, Lua, Result as LuaResult, Value as LuaValue};
@@ -9,13 +7,10 @@ use crate::colors::{MaterialScheme, Palette};
 #[derive(Debug, Clone)]
 pub(crate) struct Args {
   /// Palette to derive colors from
-  pub(crate) base_palette: Palette,
+  pub(crate) dynamic_palette: Palette,
 
   /// Whether dark mode is enabled
   pub(crate) dark_mode: bool,
-
-  /// Map to override colors in the palette with certain material entries
-  pub(crate) material_dispatch: HashMap<String, String>,
 
   /// Generate colorscheme from image
   pub(crate) img: Option<String>,
@@ -43,9 +38,8 @@ pub(crate) struct Args {
 
 impl Args {
   pub(crate) fn new(
-    base_palette: Palette,
+    dynamic_palette: Palette,
     dark_mode: bool,
-    material_dispatch: HashMap<String, String>,
     img: Option<String>,
     size: u32,
     color: Option<String>,
@@ -55,9 +49,8 @@ impl Args {
     fg_boost: f64,
   ) -> Self {
     Self {
-      base_palette,
+      dynamic_palette,
       dark_mode,
-      material_dispatch,
       img,
       size,
       color,
@@ -93,9 +86,8 @@ impl FromLua for Args {
     }
 
     Ok(Self::new(
-      check!(base_palette),
+      check!(dynamic_palette),
       check!(dark_mode),
-      check!(material_dispatch),
       check!(img),
       check!(size),
       check!(color),

@@ -1,6 +1,6 @@
 use std::{collections::HashMap, hash::RandomState, path::PathBuf, str::FromStr};
 
-use anyhow::{anyhow, bail};
+use anyhow::anyhow;
 use image::{
   AnimationDecoder, ImageFormat, ImageReader, RgbaImage,
   codecs::gif::GifDecoder,
@@ -8,7 +8,6 @@ use image::{
 };
 use material_colors::{
   color::Argb,
-  dynamic_color::Variant,
   hct::Hct,
   quantize::{Quantizer, QuantizerCelebi},
   score::Score,
@@ -108,7 +107,7 @@ pub(crate) fn generate_palette(args: Args) -> anyhow::Result<Palette> {
     ));
   };
 
-  let mut palette = args.base_palette;
+  let mut palette = args.dynamic_palette;
   let theme = ThemeBuilder::with_source(argb)
     .variant(variant.clone())
     .build();
@@ -122,10 +121,7 @@ pub(crate) fn generate_palette(args: Args) -> anyhow::Result<Palette> {
   .into_iter()
   .collect::<HashMap<_, _, RandomState>>();
 
-  for (k, val) in palette.0.iter_mut() {
-    if matches!(variant, Variant::Monochrome) || args.material_dispatch.contains_key(k) {
-      continue;
-    }
+  for val in palette.0.values_mut() {
     *val = boost_chroma_tone(
       harmonize(
         *val,
@@ -136,14 +132,6 @@ pub(crate) fn generate_palette(args: Args) -> anyhow::Result<Palette> {
       Some(1.0),
       Some(1.0 + args.fg_boost.min(1.0).max(0.0) * (if args.dark_mode { 1.0 } else { -1.0 })),
     );
-  }
-
-  for (k, material_k) in args.material_dispatch.iter() {
-    if let Some(argb) = scheme.get(material_k) {
-      palette.0.insert(k.clone(), argb.clone());
-    } else {
-      bail!("Invalid material color key '{material_k}'");
-    }
   }
 
   // Add all material colors in the palette

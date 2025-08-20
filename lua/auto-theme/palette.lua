@@ -237,19 +237,25 @@ local function f(scheme)
 
 	if not (material_you_spec.color or material_you_spec.img) then
 		vim.notify(
-			"invalid material-you spec: img and color are both not set for flavour " .. scheme,
+			"invalid material-you spec: img and color are both not set for " .. scheme .. " scheme",
 			vim.log.levels.ERROR
 		)
 		return {}
 	end
 
 	for _, k in ipairs(odrk_colors) do
-		if not (material_you_spec.base_palette[k] or material_you_spec.material_dispatch[k]) then
+		if
+			not (
+				material_you_spec.dynamic_palette[k]
+				or material_you_spec.material_dispatch[k]
+				or material_you_spec.static_palette[k]
+			)
+		then
 			vim.notify(
 				string.format(
 					[[invalid material_you spec: color '%s'
-is not set in either base_palette
-or material_dispatch in %s flavour]],
+is not set in either dynamic_palette,
+static_palette or material_dispatch in %s scheme]],
 					k,
 					scheme
 				),

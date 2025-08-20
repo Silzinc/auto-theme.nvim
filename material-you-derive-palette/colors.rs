@@ -87,7 +87,7 @@ impl FromLua for Palette {
             .map_err(|_| LuaError::from(bug("a9a7c484-f1da-4d58-b928-5c456cd09d80")))?;
 
           let v = String::from_lua(v, lua).map_err(|_| {
-            LuaError::from(anyhow!("invalid non-string value for base_palette[{k}]",))
+            LuaError::from(anyhow!("invalid non-string value for dynamic_palette[{k}]",))
           })?;
 
           map.insert(
