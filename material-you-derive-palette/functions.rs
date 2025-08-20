@@ -74,7 +74,7 @@ pub(crate) fn generate_palette(args: Args) -> anyhow::Result<Palette> {
     None
   };
 
-  // Determine the cache to store the color
+  // Determine the cache to store the key color
   // First get the hash
   let mut hasher = FxHasher::default();
   args.scheme.hash(&mut hasher);
@@ -186,7 +186,7 @@ pub(crate) fn generate_palette(args: Args) -> anyhow::Result<Palette> {
     palette.0.insert(mk, mv);
   }
 
-  // Save palette into cache
+  // Save key color into cache
   if opt_argb.is_none() {
     let f = fs::File::create(cache_file)?;
     let writer = BufWriter::new(f);
