@@ -75,7 +75,7 @@ local default_config = {
 
 	-- Plugins Related --
 	diagnostics = {
-		darker = true, -- darker colors for diagnostic
+		darker = false, -- darker colors for diagnostic
 		undercurl = true, -- use undercurl for diagnostics
 		background = true, -- use background color for virtual text
 	},
@@ -84,40 +84,26 @@ local default_config = {
 	material_you = {
 		all = {
 			material_dispatch = {
-				text = "on_background",
-				subtext0 = "on_surface_variant",
-				subtext1 = "on_surface",
-				-- equivalent to `overlay2 = "outline`
-				overlay2 = { "outline_variant", "outline", 6.0 / 6.0 },
-				overlay1 = { "outline_variant", "outline", 5.0 / 6.0 },
-				overlay0 = { "outline_variant", "outline", 4.0 / 6.0 },
-				surface2 = { "outline_variant", "outline", 3.0 / 6.0 },
-				surface1 = { "outline_variant", "outline", 2.0 / 6.0 },
-				surface0 = "surface_container_high",
-				mantle = "surface_container",
-				-- you can base replace with "surface_bright" to have something less dark in dark mode
-				base = "background",
-				crust = "surface",
+				bg0 = "surface_container_lowest",
+				bg1 = "surface_container_low",
+				bg2 = "surface_container",
+				bg3 = "surface_container_high",
+				bg_d = "surface_container_highest",
+
+				fg = "on_surface",
 			},
 			size = 128,
 			scheme = "vibrant",
-			harmony = 0.8,
+			harmony = 0.5,
 			harmonize_threshold = 100.0,
-			fg_boost = 0.35,
+			fg_boost = 0.0,
 		},
 		light = {
 			dark_mode = false,
 			color = "#252932",
-			base_palette = {
-				black = "#101012",
-				bg0 = "#fafafa",
-				bg1 = "#f0f0f0",
-				bg2 = "#e6e6e6",
-				bg3 = "#dcdcdc",
-				bg_d = "#c9c9c9",
+			dynamic_palette = {
 				bg_blue = "#68aee8",
 				bg_yellow = "#e2c792",
-				fg = "#383a42",
 				purple = "#a626a4",
 				green = "#50a14f",
 				orange = "#c18401",
@@ -125,8 +111,6 @@ local default_config = {
 				yellow = "#986801",
 				cyan = "#0184bc",
 				red = "#e45649",
-				grey = "#a0a1a7",
-				light_grey = "#818387",
 				dark_cyan = "#2b5d63",
 				dark_red = "#833b3b",
 				dark_yellow = "#7c5c20",
@@ -136,29 +120,25 @@ local default_config = {
 				diff_change = "#e2ecfb",
 				diff_text = "#cad3e0",
 			},
+			static_palette = {
+				black = "#101012",
+				grey = "#a0a1a7",
+				light_grey = "#818387",
+			},
 		},
 		dark = {
 			dark_mode = true,
 			color = "#A9C4EB",
-			base_palette = {
-				black = "#181a1f",
-				bg0 = "#282c34",
-				bg1 = "#31353f",
-				bg2 = "#393f4a",
-				bg3 = "#3b3f4c",
-				bg_d = "#21252b",
+			dynamic_palette = {
 				bg_blue = "#73b8f1",
 				bg_yellow = "#ebd09c",
-				fg = "#abb2bf",
 				purple = "#c678dd",
 				green = "#98c379",
 				orange = "#d19a66",
 				blue = "#61afef",
 				yellow = "#e5c07b",
 				cyan = "#56b6c2",
-				red = "#e86671",
-				grey = "#5c6370",
-				light_grey = "#848b98",
+				red = "#e06c75",
 				dark_cyan = "#2b6f77",
 				dark_red = "#993939",
 				dark_yellow = "#93691d",
@@ -167,6 +147,11 @@ local default_config = {
 				diff_delete = "#382b2c",
 				diff_change = "#1c3448",
 				diff_text = "#2c5372",
+			},
+			static_palette = {
+				black = "#181a1f",
+				grey = "#5c6370",
+				light_grey = "#848b98",
 			},
 		},
 	},
