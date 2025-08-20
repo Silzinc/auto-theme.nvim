@@ -342,7 +342,7 @@ else
     }
 end
 
-local diagnostics_error_color = cfg.diagnostics.darker and c.dark_red or c.red
+local diagnostics_error_color = cfg.diagnostics.darker and util.darken(c.error, 0.8, c.bg0) or c.error
 local diagnostics_hint_color = cfg.diagnostics.darker and c.dark_purple or c.purple
 local diagnostics_warn_color = cfg.diagnostics.darker and c.dark_yellow or c.yellow
 local diagnostics_info_color = cfg.diagnostics.darker and c.dark_cyan or c.cyan
