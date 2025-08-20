@@ -1,16 +1,17 @@
 [x] Find better defaults for the material you specification (it sucks rn)
-[ ] Cache the palettes generated in Rust. The cache could be a map from a hash to
-  the palette, and the hash would be generated from the path to the image + its last edition date
+[x] Cache the palettes generated in Rust. The cache could be a map from a hash to
+    the palette, and the hash would be generated from the path to the image + its last edition date
+    (the Rust code is responsible for 96% of the time required to set the colorscheme)
 [ ] Add an option to get the wallpaper in end-4's hyprland dotfiles config
 [ ] Add an actual build script to the recommended lazy.nvim spec
-  NOTE: instead of using POSIX shell which won't be supported on Windows,
-  since the user should have neovim installed, we can just write a Lua build script
-  and call it via `nvim -l build.lua`, and we'll have access to the vim object.
+    NOTE: instead of using POSIX shell which won't be supported on Windows,
+    since the user should have neovim installed, we can just write a Lua build script
+    and call it via `nvim -l build.lua`, and we'll have access to the vim object.
 [ ] Provide precompiled binaries for the shared rust library and setup a way to download it (like blink.cmp does).
-  It's only 2 Mb on Linux, neat.
+    It's only 2 Mb on Linux, neat.
 [ ] Define a user command for reloading the theme if the wallpaper changed, or with a color/path-to-image passed as argument
 [ ] (If possible) create separate themes auto-theme-light and auto-theme-dark that ignore vim.o.background
 [ ] Fcking document the options
 
 [ ] Long term (requires interested users that can test it): test wallpaper finding on GNOME and Cinnamon,
-  implement it for COSMIC, XFCE and maybe other desktops + Windows and MacOS
+    implement it for COSMIC, XFCE and maybe other desktops + Windows and MacOS

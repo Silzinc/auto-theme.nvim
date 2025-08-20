@@ -1,6 +1,13 @@
-use std::{collections::HashMap, hash::RandomState, path::PathBuf, str::FromStr};
+use std::{
+  collections::HashMap,
+  fs,
+  hash::{Hash, Hasher, RandomState},
+  io::{BufReader, BufWriter},
+  path::PathBuf,
+  str::FromStr,
+};
 
-use anyhow::anyhow;
+use anyhow::{anyhow, bail};
 use image::{
   AnimationDecoder, ImageFormat, ImageReader, RgbaImage,
   codecs::gif::GifDecoder,
@@ -14,6 +21,7 @@ use material_colors::{
   theme::ThemeBuilder,
   utils::math::{difference_degrees, rotate_direction, sanitize_degrees_double},
 };
+use rustc_hash::FxHasher;
 
 use crate::{args::Args, colors::Palette, wallpaper};
 
@@ -56,8 +64,8 @@ fn calculate_optimal_size(w: u32, h: u32, bitmap_size: u32) -> (u32, u32) {
 pub(crate) fn generate_palette(args: Args) -> anyhow::Result<Palette> {
   let variant = args.scheme.to_variant();
 
-  let img_path = if let Some(img) = args.img {
-    Some(if &img == "wallpaper" {
+  let img_path = if let Some(img) = &args.img {
+    Some(if img == "wallpaper" {
       wallpaper::get(args.dark_mode)?
     } else {
       PathBuf::from(img)
@@ -66,7 +74,48 @@ pub(crate) fn generate_palette(args: Args) -> anyhow::Result<Palette> {
     None
   };
 
-  let argb = if let Some(path) = img_path {
+  // Determine the cache to store the color
+  // First get the hash
+  let mut hasher = FxHasher::default();
+  args.scheme.hash(&mut hasher);
+  if let Some(path) = &img_path {
+    let modif_date = fs::metadata(&path).and_then(|metadata| metadata.modified())?;
+    modif_date.hash(&mut hasher);
+    path.hash(&mut hasher);
+  } else if let Some(hex) = &args.color {
+    hex.hash(&mut hasher);
+  } else {
+    bail!("Neither color nor img was provided: impossible to determine the palette.");
+  };
+  let h = hasher.finish();
+  // Then the cache directory
+  let cache_dir = dirs::cache_dir()
+    .ok_or(anyhow!(
+      "could not find cache directory in your operating system"
+    ))?
+    .join("nvim")
+    .join("auto-theme")
+    .join("palette-store");
+  if !cache_dir.exists() {
+    fs::create_dir_all(&cache_dir)?;
+  }
+  let cache_file = cache_dir.join(format!("{h}.json"));
+
+  // Check if file already exists and contains a valid palette
+  let mut opt_argb = None;
+  if cache_file.exists() {
+    let f = fs::File::open(&cache_file)?;
+    let rdr = BufReader::new(f);
+    opt_argb = serde_json::from_reader(rdr).ok();
+    // Remove garbage file if it is invalid
+    if opt_argb.is_none() {
+      fs::remove_file(&cache_file)?;
+    }
+  }
+
+  let argb = if let Some(argb) = opt_argb {
+    argb
+  } else if let Some(path) = img_path {
     let image_reader = ImageReader::open(&path)?;
 
     let mut image: RgbaImage = if image_reader.format() == Some(ImageFormat::Gif) {
@@ -102,9 +151,7 @@ pub(crate) fn generate_palette(args: Args) -> anyhow::Result<Palette> {
       hex
     )))?
   } else {
-    return Err(anyhow!(
-      "Neither color nor img was provided: impossible to determine the palette."
-    ));
+    bail!("Neither color nor img was provided: impossible to determine the palette.");
   };
 
   let mut palette = args.dynamic_palette;
@@ -137,6 +184,13 @@ pub(crate) fn generate_palette(args: Args) -> anyhow::Result<Palette> {
   // Add all material colors in the palette
   for (mk, mv) in scheme.into_iter() {
     palette.0.insert(mk, mv);
+  }
+
+  // Save palette into cache
+  if opt_argb.is_none() {
+    let f = fs::File::create(cache_file)?;
+    let writer = BufWriter::new(f);
+    serde_json::to_writer(writer, &argb)?;
   }
 
   Ok(palette)

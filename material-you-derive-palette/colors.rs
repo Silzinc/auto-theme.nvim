@@ -6,7 +6,7 @@ use mlua::{Error as LuaError, FromLua, IntoLua, Lua, Result as LuaResult, Value 
 
 use crate::utils::bug;
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Hash)]
 pub(crate) enum MaterialScheme {
   Monochrome,
   Neutral,
