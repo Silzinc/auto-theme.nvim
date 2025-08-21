@@ -84,7 +84,12 @@ function M.generate_palette(args)
 		end
 	end
 
-	local palette = M._lib.generate_palette(args)
+	local success, result = pcall(M._lib.generate_palette, args)
+	if not success then
+		vim.notify(result, vim.log.levels.ERROR)
+		return {}
+	end
+	local palette = result
 
 	-- Apply material dispatch
 	for k, mk in pairs(args.material_dispatch) do
