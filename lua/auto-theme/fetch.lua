@@ -43,20 +43,20 @@ local bin_name = os_id .. M.ext
 local bin_url = "https://github.com/Silzinc/auto-theme.nvim/releases/download/master/" .. bin_name
 local this_dir = vim.fn.fnamemodify(debug.getinfo(1, "S").source:sub(2), ":p:h")
 M.plugin_root = vim.fs.dirname(vim.fs.dirname(this_dir))
-M.bin_location = vim.fs.joinpath(M.plugin_root, "libmaterial_you_generate_palette" .. M.ext)
+M.bin_location = vim.fs.joinpath(M.plugin_root, "libmaterial_you_derive_palette" .. M.ext)
 
 function M.download_bin()
 	local function read_progress(err, data)
 		if err then
 			error(err)
 		elseif data then
-			local progress = data:sub(-6, data:len())
-			while progress:len() < 6 do
-				progress = " " .. progress
-			end
-			vim.defer_fn(function()
-				vim.notify("Downloading " .. bin_name .. progress, vim.log.levels.INFO)
-			end, 0)
+			-- local progress = data:sub(-6, data:len())
+			-- while progress:len() < 6 do
+			-- 	progress = " " .. progress
+			-- end
+			-- vim.defer_fn(function()
+			-- 	vim.notify("Downloading " .. bin_name .. progress, vim.log.levels.INFO)
+			-- end, 0)
 		end
 	end
 
@@ -82,6 +82,10 @@ function M.download_bin()
 			)
 		end, 0)
 	end
+
+	vim.defer_fn(function()
+		vim.notify("Downloading " .. bin_name, vim.log.levels.INFO)
+	end, 0)
 
 	local out = result:wait()
 	if out.code ~= 0 then
