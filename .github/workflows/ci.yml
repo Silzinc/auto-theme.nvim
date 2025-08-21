@@ -36,19 +36,17 @@ jobs:
           - os: macos-13
             os-name: macos-intel
             libext: dylib
-        toolchain: [stable]
-        libname: [libmaterial_you_derive_palette]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Build
         run: |
-          rustup update ${{ matrix.toolchain }} && rustup default ${{ matrix.toolchain }}
+          rustup update stable && rustup default stable
           cargo build --verbose --release
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: "${{ matrix.os-name }}.${{ matrix.libext }}"
-          path: "target/release/${{ matrix.libname }}.${{ matrix.libext }}"
+          path: "target/release/libmaterial_you_derive_palette.${{ matrix.libext }}"
