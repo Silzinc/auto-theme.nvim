@@ -1,72 +1,19 @@
 local M = {}
 
 local join = vim.fs.joinpath
+local fetch = require("auto-theme.fetch")
 
-local this_dir = debug.getinfo(1).source:match("@?(.*/)")
-local plugin_root = vim.fs.normalize(this_dir) .. "/../.."
-
-local ext
-if jit.os == "Windows" then
-	ext = ".dll"
-elseif jit.os == "OSX" then
-	ext = ".dylib"
-else
-	ext = ".so"
-end
-
-function M.build()
+function M.load_rust()
 	if M._lib ~= nil then
 		return
 	end
 
-	local rust_lib = join(plugin_root, "libmaterial_you_derive_palette" .. ext)
-
-	if vim.fn.filereadable(rust_lib) == 0 then
-		vim.notify("Building auto-theme shared library...", vim.log.levels.INFO)
-
-		local build_proc = vim.system(
-			{ "cargo", "build", "--release", "--manifest-path", join(plugin_root, "Cargo.toml") },
-			{ text = true }
-		):wait()
-		if build_proc.code ~= 0 then
-			vim.notify(
-				string.format(
-					"auto-theme build failed with code %d. Make sure you have cargo installed.",
-					build_proc.code
-				),
-				vim.log.levels.ERROR
-			)
-			return
-		end
-
-		local rust_lib_origin = join(plugin_root, "target", "release", "libmaterial_you_derive_palette" .. ext)
-		if not vim.fn.filereadable(rust_lib_origin) then
-			vim.notify(
-				"auto-theme build failed: dynamic library could not be found after compilation",
-				vim.log.levels.ERROR
-			)
-			return
-		end
-		if not os.rename(rust_lib_origin, rust_lib) then
-			vim.notify("auto-theme build failed", vim.log.levels.ERROR)
-			return
-		end
-
-		-- local clean_proc = vim.system(
-		-- 	{ "cargo", "clean", "--manifest-path", join(plugin_root, "Cargo.toml") },
-		-- 	{ text = true }
-		-- )
-		-- 	:wait()
-		-- if clean_proc.code ~= 0 then
-		-- 	vim.notify(
-		-- 		string.format("auto-theme build cleaning step failed with code %d.", clean_proc.code),
-		-- 		vim.log.levels.ERROR
-		-- 	)
-		-- 	return
-		-- end
+	if vim.fn.filereadable(fetch.bin_location) == 0 then
+		vim.notify("auto-theme binary was not found", vim.log.levels.INFO)
+		fetch.download_bin()
 	end
 
-	package.cpath = package.cpath .. ";" .. join(plugin_root, "lib?" .. ext)
+	package.cpath = package.cpath .. ";" .. join(fetch.plugin_root, "lib?" .. fetch.ext)
 	M._lib = require("material_you_derive_palette")
 end
 
@@ -74,7 +21,7 @@ end
 ---@param args MaterialYouArgs
 ---@return table<OnedarkColor, string>
 function M.generate_palette(args)
-	M.build()
+	M.load_rust()
 
 	-- Replace wallpaper path and material scheme if end-4 is selected
 	if args.img == "end-4" then
