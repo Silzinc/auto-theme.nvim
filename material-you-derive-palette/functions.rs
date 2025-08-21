@@ -79,7 +79,9 @@ pub(crate) fn generate_palette(args: Args) -> anyhow::Result<Palette> {
   let mut hasher = FxHasher::default();
   args.scheme.hash(&mut hasher);
   if let Some(path) = &img_path {
-    let modif_date = fs::metadata(&path).and_then(|metadata| metadata.modified())?;
+    let modif_date = fs::metadata(&path)
+      .and_then(|metadata| metadata.modified())
+      .map_err(|_| anyhow!("no image found at {}", path.display()))?;
     modif_date.hash(&mut hasher);
     path.hash(&mut hasher);
   } else if let Some(hex) = &args.color {
@@ -116,7 +118,8 @@ pub(crate) fn generate_palette(args: Args) -> anyhow::Result<Palette> {
   let argb = if let Some(argb) = opt_argb {
     argb
   } else if let Some(path) = img_path {
-    let image_reader = ImageReader::open(&path)?;
+    let image_reader =
+      ImageReader::open(&path).map_err(|_| anyhow!("no image found at {}", path.display()))?;
 
     let mut image: RgbaImage = if image_reader.format() == Some(ImageFormat::Gif) {
       let mut frames = GifDecoder::new(image_reader.into_inner())?.into_frames();
