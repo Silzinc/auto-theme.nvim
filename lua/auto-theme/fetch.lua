@@ -55,7 +55,7 @@ function M.download_bin()
 			-- 	progress = " " .. progress
 			-- end
 			-- vim.defer_fn(function()
-			-- 	vim.notify("Downloading " .. bin_name .. progress, vim.log.levels.INFO)
+			-- 	vim.notify("Downloading " .. bin_name .. progress, vim.log.levels.INFO, { title = "auto-theme.nvim" })
 			-- end, 0)
 		end
 	end
@@ -78,19 +78,24 @@ function M.download_bin()
 		vim.defer_fn(function()
 			vim.notify(
 				"Launching curl failed:\n" .. result .. "\nMake sure curl is installed on the system.",
-				vim.log.levels.ERROR
+				vim.log.levels.ERROR,
+				{ title = "auto-theme.nvim" }
 			)
 		end, 0)
 	end
 
 	vim.defer_fn(function()
-		vim.notify("Downloading " .. bin_name, vim.log.levels.INFO)
+		vim.notify("Downloading " .. bin_name, vim.log.levels.INFO, { title = "auto-theme.nvim" })
 	end, 0)
 
 	local out = result:wait()
 	if out.code ~= 0 then
 		vim.defer_fn(function()
-			vim.notify("Downloading " .. bin_name .. " binary failed, exit code: " .. out.code, vim.log.levels.ERROR)
+			vim.notify(
+				"Downloading " .. bin_name .. " binary failed, exit code: " .. out.code,
+				vim.log.levels.ERROR,
+				{ title = "auto-theme.nvim" }
+			)
 		end, 0)
 	end
 end

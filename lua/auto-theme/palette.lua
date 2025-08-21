@@ -238,7 +238,8 @@ local function f(mode)
 	if not (material_you_spec.color or material_you_spec.img) then
 		vim.notify(
 			"invalid material-you spec: img and color are both not set for " .. mode .. " mode",
-			vim.log.levels.ERROR
+			vim.log.levels.ERROR,
+			{ title = "auto-theme.nvim" }
 		)
 		return {}
 	end
@@ -259,7 +260,8 @@ static_palette or material_dispatch in %s mode]],
 					k,
 					mode
 				),
-				vim.log.levels.ERROR
+				vim.log.levels.ERROR,
+				{ title = "auto-theme.nvim" }
 			)
 			return {}
 		end

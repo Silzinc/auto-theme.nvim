@@ -1,7 +1,11 @@
 local M = {}
 
 if jit.os ~= "Linux" then
-	vim.notify("end-4 mode is only for linux nerds runnning hyprland", vim.log.levels.ERROR)
+	vim.notify(
+		"end-4 mode is only for linux nerds runnning hyprland",
+		vim.log.levels.ERROR,
+		{ title = "auto-theme.nvim" }
+	)
 	return {}
 end
 
@@ -43,7 +47,8 @@ function M.scheme(img)
 	if vim.fn.filereadable(img) == 0 then
 		vim.notify(
 			"if using end-4 mode with auto material scheme, please set img to 'end-4' or to an absolute path",
-			vim.log.levels.ERROR
+			vim.log.levels.ERROR,
+			{ title = "auto-theme.nvim" }
 		)
 		return
 	end
@@ -51,14 +56,22 @@ function M.scheme(img)
 	local end4_sch = get_config("appearance", "palette", "type")
 
 	if end4_sch == nil then
-		vim.notify("failed to get material scheme from end-4 config file", vim.log.levels.ERROR)
+		vim.notify(
+			"failed to get material scheme from end-4 config file",
+			vim.log.levels.ERROR,
+			{ title = "auto-theme.nvim" }
+		)
 		return
 	end
 
 	if end4_sch == "auto" then
 		local proc = vim.system({ scheme_for_image, img }, { text = true }):wait()
 		if proc.code ~= 0 then
-			vim.notify("failed to get material scheme in end-4 mode:\n" .. proc.stderr, vim.log.levels.ERROR)
+			vim.notify(
+				"failed to get material scheme in end-4 mode:\n" .. proc.stderr,
+				vim.log.levels.ERROR,
+				{ title = "auto-theme.nvim" }
+			)
 			return
 		end
 		-- remove trailing \n
