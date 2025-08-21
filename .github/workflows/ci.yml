@@ -1,0 +1,52 @@
+name: Cargo Build
+
+on:
+  push:
+    paths:
+      - "**.rs"
+      - "Cargo.toml"
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+    name: Build ${{ matrix.os-name }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            os-name: linux-x64
+            libext: so
+          - os: ubuntu-24.04-arm
+            os-name: linux-arm64
+            libext: so
+          - os: windows-latest
+            os-name: windows-x64
+            libext: dll
+          - os: windows-11-arm
+            os-name: windows-arm64
+            libext: dll
+          - os: macos-latest
+            os-name: macos-m1
+            libext: dylib
+          - os: macos-13
+            os-name: macos-intel
+            libext: dylib
+        toolchain: [stable]
+        libname: [libmaterial_you_derive_palette]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build
+        run: |
+          rustup update ${{ matrix.toolchain }} && rustup default ${{ matrix.toolchain }}
+          cargo build --verbose --release
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: "${{ matrix.os-name }}.${{ matrix.libext }}"
+          path: "target/release/${{ matrix.libname }}.${{ matrix.libext }}"
