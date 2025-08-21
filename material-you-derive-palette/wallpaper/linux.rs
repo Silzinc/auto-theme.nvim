@@ -36,7 +36,13 @@ impl SessionType {
         let path_str = str::from_utf8(path_bytes).map_err(|_| {
           anyhow!("KDE wallpaper detection: path to image is not a valid utf-8 string")
         })?;
-        let dir = PathBuf::from(path_str).join("contents");
+
+        let path_buf = PathBuf::from(path_str);
+        if path_buf.is_file() {
+          return Ok(path_buf);
+        }
+
+        let dir = path_buf.join("contents");
         if !dir.is_dir() {
           bail!(
             "KDE wallpaper detection: '{}' is not a directory",
