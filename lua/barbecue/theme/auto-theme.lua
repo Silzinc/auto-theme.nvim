@@ -1,4 +1,4 @@
-local c = require("auto-theme.colors")
+local c = require("auto-theme.colors")()
 
 return {
 	normal = {

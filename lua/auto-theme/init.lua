@@ -11,25 +11,28 @@ function M.set_options(opt, value)
 end
 
 ---Apply the colorscheme (same as ':colorscheme auto-theme')
-function M.colorscheme()
+---@param style "dark" | "light" | nil
+function M.colorscheme(style)
 	vim.cmd("hi clear")
 	if vim.fn.exists("syntax_on") then
 		vim.cmd("syntax reset")
 	end
-	vim.o.termguicolors = true
-	vim.g.colors_name = "auto-theme"
-	if vim.o.background == "light" then
-		M.set_options("style", "light")
-	elseif vim.g.auto_theme_config.style == "light" then
-		M.set_options("style", "light")
+
+	if not style then
+		vim.g.colors_name = "auto-theme"
+		style = vim.o.background
+	else
+		vim.g.colors_name = "auto-theme-" .. style
 	end
+
+	vim.o.termguicolors = true
+	M.set_options("style", style)
 	require("auto-theme.highlights").setup()
 	require("auto-theme.terminal").setup()
 end
 
 local default_config = {
 	-- Main options --
-	style = "dark", -- choose between 'dark' and 'light'
 	transparent = false, -- don't set background
 	term_colors = true, -- if true enable the terminal
 	ending_tildes = false, -- show the end-of-buffer tildes
@@ -138,7 +141,7 @@ local default_config = {
 }
 
 ---Setup auto-theme.nvim options, without applying colorscheme
----@param opts table: a table containing options
+---@param opts table?: a table containing options
 function M.setup(opts)
 	if not vim.g.auto_theme_config or not vim.g.auto_theme_config.loaded then -- if it's the first time setup() is called
 		vim.g.auto_theme_config = vim.tbl_deep_extend("keep", vim.g.auto_theme_config or {}, default_config)
@@ -150,7 +153,7 @@ function M.setup(opts)
 end
 
 function M.load()
-	vim.api.nvim_command("colorscheme auto-theme")
+	vim.cmd.colorscheme("auto-theme")
 end
 
 return M

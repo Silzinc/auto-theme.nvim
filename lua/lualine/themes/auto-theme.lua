@@ -1,4 +1,4 @@
-local c = require("auto-theme.colors")
+local c = require("auto-theme.colors")()
 local cfg = vim.g.auto_theme_config
 local colors = {
 	bg = c.bg0,

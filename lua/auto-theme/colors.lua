@@ -7,4 +7,4 @@ local function select_colors()
 	return selected
 end
 
-return select_colors()
+return select_colors
