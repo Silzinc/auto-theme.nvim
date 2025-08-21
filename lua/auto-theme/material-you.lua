@@ -79,9 +79,18 @@ function M.generate_palette(args)
 	-- Replace wallpaper path and material scheme if end-4 is selected
 	if args.img == "end-4" then
 		args.img = require("auto-theme.end_4").wallpaper()
+		if args.img == nil then
+			vim.notify("end-4 wallpaper could not be found", vim.log.levels.ERROR)
+			return {}
+		end
 	end
 	if args.scheme == "end-4" then
-		args.scheme = require("auto-theme.end_4").scheme(args.img) or error()
+		local scheme = require("auto-theme.end_4").scheme(args.img)
+		if scheme == nil then
+			vim.notify("end-4 material scheme could not be determiend", vim.log.levels.ERROR)
+			return {}
+		end
+		args.scheme = scheme
 	end
 
 	-- Isolate the mixed colors from the table as the rust code should not process them.
