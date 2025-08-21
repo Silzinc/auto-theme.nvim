@@ -7,9 +7,10 @@
 [x] Add an actual build script to the recommended lazy.nvim spec
 [x] Provide precompiled binaries for the shared rust library and setup a way to download it (like blink.cmp does).
     It's only 2 Mb on Linux, neat.
-[ ] Define a user command for reloading the theme if the wallpaper changed, or with a color/path-to-image passed as argument
+[0] Define a user command for reloading the theme if the wallpaper changed, or with a color/path-to-image passed as argument
+    (Useless actually, the theme reloads on its own on colorscheme command)
 [x] (If possible) create separate themes auto-theme-light and auto-theme-dark that ignore vim.o.background
-[ ] Fcking document the options
+[x] Fcking document the options
 
 [ ] Long term (requires interested users that can test it): test wallpaper finding on GNOME and Cinnamon,
     implement it for COSMIC, XFCE and maybe other desktops + Windows and MacOS
