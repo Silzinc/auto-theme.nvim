@@ -144,7 +144,15 @@ local default_config = {
 ---@param opts table?: a table containing options
 function M.setup(opts)
 	if not vim.g.auto_theme_config or not vim.g.auto_theme_config.loaded then -- if it's the first time setup() is called
-		vim.g.auto_theme_config = vim.tbl_deep_extend("keep", vim.g.auto_theme_config or {}, default_config)
+		local cfg = vim.g.auto_theme_config
+		-- default material_you.dark/light has weaker priority than user material_you.all
+		if cfg and cfg.material_you and cfg.material_you.all then
+			cfg.material_you.dark = vim.tbl_deep_extend("keep", cfg.material_you.dark or {}, cfg.material_you.all)
+			cfg.material_you.light = vim.tbl_deep_extend("keep", cfg.material_you.light or {}, cfg.material_you.all)
+		end
+		cfg = vim.tbl_deep_extend("keep", cfg or {}, default_config)
+		vim.g.auto_theme_config = cfg
+
 		M.set_options("loaded", true)
 	end
 	if opts then
