@@ -156,7 +156,7 @@ if vim.api.nvim_call_function("has", { "nvim-0.8" }) == 1 then
 		["@constant"] = { fg = c.orange, fmt = cfg.code_style.constants },
 		["@constant.builtin"] = { fg = c.orange, fmt = cfg.code_style.constants },
 		["@constant.macro"] = { fg = c.orange, fmt = cfg.code_style.constants },
-		["@constructor"] = { fg = c.yellow, fmt = "bold" },
+		["@constructor"] = { fg = c.cyan, fmt = "bold" },
 		["@diff.add"] = hl.common.DiffAdded,
 		["@diff.delete"] = hl.common.DiffDeleted,
 		["@diff.plus"] = hl.common.DiffAdded,
@@ -211,7 +211,7 @@ if vim.api.nvim_call_function("has", { "nvim-0.8" }) == 1 then
 		["@type"] = colors.Yellow,
 		["@type.builtin"] = colors.Orange,
 		["@variable"] = { fg = c.fg, fmt = cfg.code_style.variables },
-		["@variable.builtin"] = { fg = c.red, fmt = cfg.code_style.variables },
+		["@variable.builtin"] = { fg = c.yellow, fmt = cfg.code_style.variables },
 		["@variable.member"] = colors.Cyan,
 		["@variable.parameter"] = colors.Red,
 		["@markup.heading.1.markdown"] = { fg = c.red, fmt = "bold" },
@@ -226,6 +226,12 @@ if vim.api.nvim_call_function("has", { "nvim-0.8" }) == 1 then
 		["@markup.heading.4.marker.markdown"] = { fg = c.red, fmt = "bold" },
 		["@markup.heading.5.marker.markdown"] = { fg = c.purple, fmt = "bold" },
 		["@markup.heading.6.marker.markdown"] = { fg = c.orange, fmt = "bold" },
+
+		-- js specifics
+		["@include.identifier.typescript"] = { fg = c.fg },
+		["@include.identifier.javascript"] = { fg = c.fg },
+		["@include.identifier.jsx"] = { fg = c.fg },
+		["@include.identifier.tsx"] = { fg = c.fg },
 
 		-- Old configuration for nvim-treesiter@0.9.1 and below
 		["@conditional"] = { fg = c.purple, fmt = cfg.code_style.keywords },
@@ -294,7 +300,7 @@ else
 		TSConstant = colors.Orange,
 		TSConstBuiltin = colors.Orange,
 		TSConstMacro = colors.Orange,
-		TSConstructor = { fg = c.yellow, fmt = "bold" },
+		TSConstructor = { fg = c.cyan, fmt = "bold" },
 		TSError = colors.Fg,
 		TSException = colors.Purple,
 		TSField = colors.Cyan,
@@ -572,12 +578,12 @@ hl.plugins.telescope = {
 
 hl.plugins.snacks = {
 	-- Dashboard
-	SnacksDashboardHeader = colors.Yellow,
-	SnacksDashboardFooter = { fg = c.dark_red, fmt = "italic" },
-	SnacksDashboardSpecial = { fg = c.dark_red, fmt = "bold" },
+	SnacksDashboardHeader = colors.Blue,
+	SnacksDashboardFooter = { fg = c.yellow, fmt = "italic" },
+	SnacksDashboardSpecial = { fg = c.purple, fmt = "bold" },
 	SnacksDashboardDesc = colors.Cyan,
-	SnacksDashboardIcon = colors.Cyan,
-	SnacksDashboardKey = colors.Blue,
+	SnacksDashboardIcon = colors.Red,
+	SnacksDashboardKey = colors.Orange,
 
 	-- Picker
 	SnacksPicker = hl.common.Normal,
