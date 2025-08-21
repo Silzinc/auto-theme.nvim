@@ -1,7 +1,5 @@
 local M = {}
 
-M.styles_list = { "dark", "light" }
-
 ---Change auto-theme option (vim.g.auto_theme_config.option)
 ---It can't be changed directly by modifying that field due to a Neovim lua bug with global variables (auto_theme_config is a global variable)
 ---@param opt string: option name
@@ -29,27 +27,9 @@ function M.colorscheme()
 	require("auto-theme.terminal").setup()
 end
 
----Toggle between auto-theme styles
-function M.toggle()
-	local index = vim.g.auto_theme_config.toggle_style_index + 1
-	if index > #vim.g.auto_theme_config.toggle_style_list then
-		index = 1
-	end
-	M.set_options("style", vim.g.auto_theme_config.toggle_style_list[index])
-	M.set_options("toggle_style_index", index)
-	if vim.g.auto_theme_config.style == "light" then
-		vim.o.background = "light"
-	else
-		vim.o.background = "dark"
-	end
-	vim.api.nvim_command("colorscheme auto-theme")
-end
-
 local default_config = {
 	-- Main options --
 	style = "dark", -- choose between 'dark' and 'light'
-	toggle_style_key = nil,
-	toggle_style_list = M.styles_list,
 	transparent = false, -- don't set background
 	term_colors = true, -- if true enable the terminal
 	ending_tildes = false, -- show the end-of-buffer tildes
@@ -163,21 +143,9 @@ function M.setup(opts)
 	if not vim.g.auto_theme_config or not vim.g.auto_theme_config.loaded then -- if it's the first time setup() is called
 		vim.g.auto_theme_config = vim.tbl_deep_extend("keep", vim.g.auto_theme_config or {}, default_config)
 		M.set_options("loaded", true)
-		M.set_options("toggle_style_index", 0)
 	end
 	if opts then
 		vim.g.auto_theme_config = vim.tbl_deep_extend("force", vim.g.auto_theme_config, opts)
-		if opts.toggle_style_list then -- this table cannot be extended, it has to be replaced
-			M.set_options("toggle_style_list", opts.toggle_style_list)
-		end
-	end
-	if vim.g.auto_theme_config.toggle_style_key then
-		vim.api.nvim_set_keymap(
-			"n",
-			vim.g.auto_theme_config.toggle_style_key,
-			'<cmd>lua require("auto-theme").toggle()<cr>',
-			{ noremap = true, silent = true }
-		)
 	end
 end
 
