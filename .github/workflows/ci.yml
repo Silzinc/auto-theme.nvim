@@ -5,6 +5,8 @@ on:
     paths:
       - "**.rs"
       - "Cargo.toml"
+    branches:
+      - "master"
 
 env:
   CARGO_TERM_COLOR: always
