@@ -199,9 +199,9 @@ local old_palettes = {
 }
 
 ---Generate palette from material_you specification (which is only set in the plugin's options and default options)
----@param scheme "dark" | "light"
+---@param mode "dark" | "light"
 ---@return table<OnedarkColor, string>
-local function f(scheme)
+local function f(mode)
 	local cfg = vim.g.auto_theme_config
 
 	local odrk_colors = {
@@ -233,11 +233,11 @@ local function f(scheme)
 		"diff_text",
 	}
 
-	local material_you_spec = vim.tbl_deep_extend("keep", cfg.material_you[scheme], cfg.material_you.all)
+	local material_you_spec = vim.tbl_deep_extend("keep", cfg.material_you[mode], cfg.material_you.all)
 
 	if not (material_you_spec.color or material_you_spec.img) then
 		vim.notify(
-			"invalid material-you spec: img and color are both not set for " .. scheme .. " scheme",
+			"invalid material-you spec: img and color are both not set for " .. mode .. " mode",
 			vim.log.levels.ERROR
 		)
 		return {}
@@ -255,9 +255,9 @@ local function f(scheme)
 				string.format(
 					[[invalid material_you spec: color '%s'
 is not set in either dynamic_palette,
-static_palette or material_dispatch in %s scheme]],
+static_palette or material_dispatch in %s mode]],
 					k,
-					scheme
+					mode
 				),
 				vim.log.levels.ERROR
 			)
