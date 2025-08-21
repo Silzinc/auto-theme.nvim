@@ -1,6 +1,12 @@
 ## What is this
 
-A [onedark.nvim](https://github.com/navarasu/onedark.nvim) based theme that automatically adapts its palette to a color or an image that you give to it. Examples: \<soon\>
+A [onedark.nvim](https://github.com/navarasu/onedark.nvim) based theme that automatically adapts its palette to a color or an image that you give to it. Examples:
+
+<img width="1918" height="1018" alt="image" src="https://github.com/user-attachments/assets/4ded9611-0b52-44ff-b705-ae856c66b6f5" />
+<img width="1920" height="1018" alt="image" src="https://github.com/user-attachments/assets/d33ee935-7567-4aea-ae24-daa5e2b7a6d0" />
+<img width="1885" height="994" alt="image" src="https://github.com/user-attachments/assets/342f458d-ba14-4c4d-bb2f-f784372109ca" />
+
+
 
 ## Prerequisites
 
