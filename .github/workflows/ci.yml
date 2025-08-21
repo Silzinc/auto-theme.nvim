@@ -1,4 +1,4 @@
-name: Cargo Build
+name: Release rust
 
 on:
   workflow_dispatch:
@@ -57,3 +57,26 @@ jobs:
         with:
           name: "${{ matrix.os-name }}.${{ matrix.libext }}"
           path: "target/release/${{ matrix.libname }}.${{ matrix.libext }}"
+  release:
+    name: Release
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+
+      - name: Generate checksums
+        run: |
+          for file in ./**/*; do
+            sha256sum "$file" > "${file}.sha256"
+          done
+
+      - name: Upload Release Assets
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ./**/*
+          draft: false
+          prerelease: false
+          generate_release_notes: true
