@@ -2,7 +2,8 @@
 [x] Cache the palettes generated in Rust. The cache could be a map from a hash to
     the palette, and the hash would be generated from the path to the image + its last edition date
     (the Rust code is responsible for 96% of the time required to set the colorscheme)
-[ ] Add an option to get the wallpaper in end-4's hyprland dotfiles config
+[-] Add an option to get the wallpaper in end-4's hyprland dotfiles config
+    (needs to be tested)
 [ ] Add an actual build script to the recommended lazy.nvim spec
     NOTE: instead of using POSIX shell which won't be supported on Windows,
     since the user should have neovim installed, we can just write a Lua build script

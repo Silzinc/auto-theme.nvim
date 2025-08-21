@@ -76,6 +76,14 @@ end
 function M.generate_palette(args)
 	M.build()
 
+	-- Replace wallpaper path and material scheme if end-4 is selected
+	if args.img == "end-4" then
+		args.img = require("auto-theme.end_4").wallpaper()
+	end
+	if args.scheme == "end-4" then
+		args.scheme = require("auto-theme.end_4").scheme(args.img) or error()
+	end
+
 	-- Isolate the mixed colors from the table as the rust code should not process them.
 	-- Also validate the colors.
 	local mixed_colors = {}
