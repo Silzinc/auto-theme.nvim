@@ -51,12 +51,13 @@ jobs:
         run: |
           rustup update stable && rustup default stable
           cargo build --verbose --release
+          mv "target/release/${{ matrix.libname }}.${{ matrix.libext }}" "${{ matrix.os-name }}.${{ matrix.libext }}"
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: "${{ matrix.os-name }}.${{ matrix.libext }}"
-          path: "target/release/${{ matrix.libname }}.${{ matrix.libext }}"
+          path: "${{ matrix.os-name }}.${{ matrix.libext }}"
   release:
     name: Release
     needs: build
