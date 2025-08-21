@@ -1,3 +1,8 @@
+## Prerequisites
+
+- Neovim (tested on version 0.11.3, it should probably work from 0.9 at least)
+- curl, to install the binary
+
 ## Installation
 Install via your favourite package manager. It is recommended to use Lazy with the following spec:
 
