@@ -44,7 +44,7 @@ impl SessionType {
           );
         }
 
-        let img_finder = |entry: &std::fs::DirEntry| {
+        let img_finder = |path: &PathBuf| {
           macro_rules! ask {
             ($opt:expr) => {
               match $opt {
@@ -53,7 +53,6 @@ impl SessionType {
               }
             };
           }
-          let path = entry.path();
           let ext = ask!(ask!(path.extension()).to_str());
           let name = ask!(ask!(path.file_stem()).to_str());
           let dims: Vec<&str> = name.split('x').collect();
@@ -65,11 +64,21 @@ impl SessionType {
         };
 
         let find_img = |d: PathBuf| {
-          for entry in fs::read_dir(d.clone())? {
+          for entry in fs::read_dir(&d)? {
             let entry = entry?;
-            if entry.file_type()?.is_file() {
-              if img_finder(&entry) {
-                return Ok(entry.path());
+            let path = entry.path();
+            let realpath = if path.is_symlink() {
+              // if the symlink path is relative, we want to join it to the original
+              let link = fs::read_link(&path)?;
+              let joint = d.join(&link);
+              if link.exists() { link } else { joint }
+            } else {
+              path.clone()
+            };
+            let realpath = fs::canonicalize(realpath)?;
+            if realpath.metadata()?.is_file() {
+              if img_finder(&path) {
+                return Ok(realpath);
               }
             }
           }
