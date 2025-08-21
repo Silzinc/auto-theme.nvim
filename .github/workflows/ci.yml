@@ -22,21 +22,27 @@ jobs:
           - os: ubuntu-latest
             os-name: linux-x64
             libext: so
+            libname: libmaterial_you_derive_palette
           - os: ubuntu-24.04-arm
             os-name: linux-arm64
             libext: so
+            libname: libmaterial_you_derive_palette
           - os: windows-latest
             os-name: windows-x64
             libext: dll
+            libname: material_you_derive_palette
           - os: windows-11-arm
             os-name: windows-arm64
             libext: dll
+            libname: material_you_derive_palette
           - os: macos-latest
             os-name: macos-m1
             libext: dylib
+            libname: libmaterial_you_derive_palette
           - os: macos-13
             os-name: macos-intel
             libext: dylib
+            libname: libmaterial_you_derive_palette
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -50,4 +56,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: "${{ matrix.os-name }}.${{ matrix.libext }}"
-          path: "target/release/libmaterial_you_derive_palette.${{ matrix.libext }}"
+          path: "target/release/${{ matrix.libname }}.${{ matrix.libext }}"
