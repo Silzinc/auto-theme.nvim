@@ -1,8 +1,8 @@
 use std::{
   collections::HashMap,
   fs,
-  hash::{Hash, Hasher, RandomState},
-  io::{BufReader, BufWriter},
+  hash::{DefaultHasher, Hash, Hasher, RandomState},
+  io::{BufReader, BufWriter, Read, Write},
   path::PathBuf,
   str::FromStr,
 };
@@ -21,7 +21,6 @@ use material_colors::{
   theme::ThemeBuilder,
   utils::math::{difference_degrees, rotate_direction, sanitize_degrees_double},
 };
-use rustc_hash::FxHasher;
 
 use crate::{args::Args, colors::Palette, wallpaper};
 
@@ -76,7 +75,7 @@ pub(crate) fn generate_palette(args: Args) -> anyhow::Result<Palette> {
 
   // Determine the cache to store the key color
   // First get the hash
-  let mut hasher = FxHasher::default();
+  let mut hasher = DefaultHasher::new();
   args.scheme.hash(&mut hasher);
   args.size.hash(&mut hasher);
   if let Some(path) = &img_path {
@@ -102,14 +101,16 @@ pub(crate) fn generate_palette(args: Args) -> anyhow::Result<Palette> {
   if !cache_dir.exists() {
     fs::create_dir_all(&cache_dir)?;
   }
-  let cache_file = cache_dir.join(format!("{h}.json"));
+  let cache_file = cache_dir.join(h.to_string());
 
   // Check if file already exists and contains a valid palette
   let mut opt_argb = None;
   if cache_file.exists() {
     let f = fs::File::open(&cache_file)?;
-    let rdr = BufReader::new(f);
-    opt_argb = serde_json::from_reader(rdr).ok();
+    let mut rdr = BufReader::new(f);
+    let mut buf = [0u8; 6];
+    rdr.read_exact(&mut buf)?;
+    opt_argb = Argb::from_str(str::from_utf8(&buf)?).ok();
     // Remove garbage file if it is invalid
     if opt_argb.is_none() {
       fs::remove_file(&cache_file)?;
@@ -193,8 +194,8 @@ pub(crate) fn generate_palette(args: Args) -> anyhow::Result<Palette> {
   // Save key color into cache
   if opt_argb.is_none() {
     let f = fs::File::create(cache_file)?;
-    let writer = BufWriter::new(f);
-    serde_json::to_writer(writer, &argb)?;
+    let mut writer = BufWriter::new(f);
+    writer.write_all(argb.to_hex().as_bytes())?;
   }
 
   Ok(palette)

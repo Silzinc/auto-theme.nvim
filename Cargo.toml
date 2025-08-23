@@ -8,16 +8,12 @@ path = "material-you-derive-palette/lib.rs"
 crate-type = ["cdylib"]
 
 [dependencies]
-mlua = { version = "0.11.2", features = ["luajit", "module", "macros", "anyhow"] }
+mlua = { version = "0.11.2", features = ["luajit", "module", "anyhow"] }
 image = "0.25.6"
 anyhow = "1.0.99"
-material-colors = { version = "0.4.2", features = ["std", "serde"], git = "https://github.com/Silzinc/material-colors.git" }
+material-colors = { version = "0.4.2" }
 dirs = "6.0.0"
-serde = { version = "1.0.219", features = ["derive"] }
-serde_json = "1.0.143"
-rustc-hash = "2.1.1"
 
 [profile.release]
 lto = true
 strip = true
-opt-level = 3
