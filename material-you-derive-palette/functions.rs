@@ -78,6 +78,7 @@ pub(crate) fn generate_palette(args: Args) -> anyhow::Result<Palette> {
   // First get the hash
   let mut hasher = FxHasher::default();
   args.scheme.hash(&mut hasher);
+  args.size.hash(&mut hasher);
   if let Some(path) = &img_path {
     let modif_date = fs::metadata(&path)
       .and_then(|metadata| metadata.modified())
