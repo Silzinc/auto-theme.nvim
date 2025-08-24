@@ -74,7 +74,7 @@ function M.setup()
 		IncSearch = { fg = c.bg0, bg = c.orange },
 		Search = { fg = c.bg0, bg = c.bg_yellow },
 		Substitute = { fg = c.bg0, bg = c.green },
-		MatchParen = { fg = c.fg, bg = c.grey },
+		MatchParen = { fg = c.fg, bg = c.bg_d },
 		NonText = { fg = c.grey },
 		Whitespace = { fg = c.grey },
 		SpecialKey = { fg = c.grey },
