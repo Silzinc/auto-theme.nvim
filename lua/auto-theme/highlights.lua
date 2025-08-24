@@ -982,7 +982,6 @@ function M.setup()
 						'auto-theme.nvim: unknown color "' .. name .. '"',
 						vim.log.levels.ERROR,
 						{ title = "auto-theme.nvim" },
-						{ title = "auto-theme.nvim" }
 					)
 				end)
 				return ""
