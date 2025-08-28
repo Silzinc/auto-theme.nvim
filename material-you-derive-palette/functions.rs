@@ -1,6 +1,6 @@
 use std::{
   collections::HashMap,
-  fs,
+  env, fs,
   hash::{DefaultHasher, Hash, Hasher, RandomState},
   io::{BufReader, BufWriter, Read, Write},
   path::PathBuf,
@@ -90,11 +90,21 @@ pub(crate) fn generate_palette(args: Args) -> anyhow::Result<Palette> {
     bail!("Neither color nor img was provided: impossible to determine the palette.");
   };
   let h = hasher.finish();
+
+  let check_path = |path: PathBuf| {
+    if path.is_absolute() { Some(path) } else { None }
+  };
+
   // Then the cache directory
-  let cache_dir = dirs::cache_dir()
-    .ok_or(anyhow!(
-      "could not find cache directory in your operating system"
-    ))?
+  let cache_dir = env::var_os("XDG_CACHE_HOME")
+    .map(|path| PathBuf::from(path))
+    .and_then(check_path)
+    .or_else(|| {
+      env::home_dir()
+        .map(|h| h.join(".cache"))
+        .and_then(check_path)
+    })
+    .ok_or(anyhow!("could not find cache directory in linux"))?
     .join("nvim")
     .join("auto-theme")
     .join("palette-store");
