@@ -1,5 +1,9 @@
 use anyhow::{Result, anyhow, bail};
-use std::{env, fs, path::PathBuf, process::Command};
+use std::{
+  env, fs,
+  path::PathBuf,
+  process::{Command, Stdio},
+};
 
 use crate::utils::bug;
 
@@ -16,14 +20,30 @@ impl SessionType {
   fn get_wallpaper(&self, dark_mode: bool) -> Result<PathBuf> {
     match self {
       Self::Kde => {
-        let wallp_proc = Command::new("qdbus")
+        let program_name = if Command::new("qdbus")
+          .stdout(Stdio::null())
+          .stderr(Stdio::null())
+          .output()
+          .is_ok()
+        {
+          "qdbus"
+        } else {
+          "qdbus6"
+        };
+
+        let wallp_proc = Command::new(program_name)
           .args([
             "org.kde.plasmashell",
             "/PlasmaShell",
             "org.kde.PlasmaShell.wallpaper",
             "0",
           ])
-          .output()?;
+          .output()
+          .map_err(|_| {
+            anyhow!(
+              "KDE wallpaper detection: Could not launch {program_name} to find the wallpaper path"
+            )
+          })?;
         let prefix = b"Image: ";
         let img_line = wallp_proc
           .stdout
@@ -88,10 +108,15 @@ impl SessionType {
               }
             }
           }
-          bail!(
+          Err(anyhow!(""))
+        };
+
+        let find_img = |d: PathBuf| {
+          let err = anyhow!(
             "KDE wallpaper detection: No valid wallpaper found at {}",
             d.display()
           );
+          find_img(d).map_err(|_| err)
         };
 
         if dark_mode {
