@@ -86,7 +86,7 @@ impl SessionType {
           dims.len() == 2
             && ask!(dims[0].parse::<u32>().ok()) > 0
             && ask!(dims[1].parse::<u32>().ok()) > 0
-            && ["jpg", "jpeg", "png", "jxl", "tif", "tiff"].contains(&ext)
+            && ["jpg", "jpeg", "png", "tif", "tiff"].contains(&ext)
         };
 
         let find_img = |d: PathBuf| {
